@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2b0b3f">
+<title>Nuestro Amor</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-dark: #2b0b3f;
+    --bg-pink: linear-gradient(180deg, #ff4d8d 0%, #d9186b 100%);
+    --input-bg: rgba(0, 0, 0, 0.2);
+    --text-light: #ffffff;
+    --text-muted: #ffcce0;
+  }
+
+  html {
+    background: var(--bg-dark);
+    background-image: radial-gradient(circle at 50% 0%, #4a156b 0%, #2b0b3f 70%);
+    background-attachment: fixed;
+  }
+
+  body {
+    width: 100%;
+    min-height: 100vh;
+    color: var(--text-light);
+    font-family: 'Poppins', sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    padding: 16px;
+    overflow-x: hidden;
+  }
+
+  .app-container {
+    width: 100%;
+    max-width: 400px;
+    height: 680px;
+    flex: 0 0 auto;
+    background: var(--bg-pink);
+    border-radius: 32px;
+    padding: 30px 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .app-container::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .num {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Pantalla de Configuración */
+  h1 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  h1 .cursive {
+    display: block;
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.8rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.1;
+    margin-top: 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    -webkit-text-stroke: 1px white;
+  }
+
+  .error {
+    background: rgba(255, 60, 90, 0.9);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    text-align: center;
+    display: none;
+  }
+
+  .input-group { margin-bottom: 16px; }
+  .input-group label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    margin-left: 10px;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 25px;
+    border: none;
+    background: var(--input-bg);
+    color: white;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+  }
+  input::placeholder { color: rgba(255,255,255,0.4); }
+  input:focus { box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
+  input[type="date"], input[type="time"] { color-scheme: dark; }
+
+  button {
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  button:active { transform: scale(0.97); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #ffffff;
+    color: #d9186b;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    margin-top: auto;
+  }
+
+  /* Pantalla de Contador */
+  #screen-counter {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
+    position: relative;
+    min-width: 0;
+  }
+  #screen-counter.active { display: flex; }
+  #screen-setup.hidden { display: none; }
+
+  /* Tipografía formal y legible para los nombres */
+  .names-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.2;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Subtítulo elegante */
+  .together-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 5px;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+
+  .date-display {
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 25px;
+    font-weight: 400;
+    width: 100%;
+  }
+
+  /* Reloj principal */
+  .main-timer {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 20px 15px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    height: 240px;
+    flex: 0 0 240px;
+    overflow: hidden;
+  }
+
+  .timer-years, .timer-months-days, .timer-live {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .timer-years { height: 70px; align-items: center; }
+  .timer-years .val { font-size: 4.5rem; font-weight: 700; line-height: 1; text-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+  .timer-years .unit { font-size: 1.6rem; font-weight: 500; }
+
+  .timer-months-days { height: 40px; }
+  .timer-months-days .val { font-size: 1.8rem; font-weight: 600; text-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+  .timer-months-days .unit { font-size: 1.1rem; font-weight: 500; }
+  .timer-months-days .sep { font-size: 1.4rem; opacity: .8; }
+
+  .timer-live { height: 40px; color: #ffebf3; gap: 4px; }
+  .timer-live .val {
+    font-size: 1.5rem; font-weight: 500;
+    display: inline-block;
+    min-width: 2ch;
+    text-align: center;
+  }
+  .timer-live .unit { font-size: 1rem; opacity: .85; margin-right: 6px; }
+  .timer-live .unit:last-child { margin-right: 0; }
+
+  .unit { font-family: 'Poppins', sans-serif; }
+
+  /* Totales */
+  .totals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .total-box {
+    background: rgba(0,0,0,0.25);
+    border-radius: 16px;
+    padding: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    min-width: 0;
+    height: 74px;
+  }
+
+  .total-box strong {
+    font-size: 1.35rem;
+    font-weight: 700;
+    display: block;
+    line-height: 1.2;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .total-box span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Botón flotante más pequeño (40px) */
+  .btn-fab {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.25);
+    color: white;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(5px);
+    z-index: 10;
+    opacity: 0.8;
+    transition: opacity 0.2s, background 0.2s;
+  }
+  .btn-fab:hover, .btn-fab:active { 
+    background: rgba(0,0,0,0.4); 
+    opacity: 1;
+  }
+
+  /* Menú de Opciones Modal */
+  .modal-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 100;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+  .modal-content {
+    background: #ffffff;
+    width: 100%;
+    border-radius: 30px 30px 0 0;
+    padding: 24px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .modal-overlay.active .modal-content { transform: translateY(0); }
+
+  .modal-title {
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .btn-option {
+    background: #f0f0f5;
+    color: #333;
+    font-weight: 500;
+    padding: 14px;
+    border-radius: 15px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  .btn-option.danger { color: #d9186b; }
+  .btn-close {
+    background: transparent;
+    color: #888;
+    font-weight: 600;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 1rem;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- PANTALLA 1: CONFIGURACIÓN -->
+  <div id="screen-setup">
+    <h1>Nuestra <span class="cursive">Fecha</span></h1>
+
+    <div id="errorMsg" class="error"></div>
+
+    <form id="form" novalidate>
+      <div class="input-group">
+        <label>Nombres de la pareja *</label>
+        <input id="namesInput" type="text" placeholder="Ej: Ana & Carlos" maxlength="60">
+      </div>
+
+      <div class="input-group">
+        <label>Fecha de inicio *</label>
+        <input id="dateInput" type="date">
+      </div>
+
+      <div class="input-group">
+        <label>Hora (opcional)</label>
+        <input id="timeInput" type="time">
+      </div>
+
+      <button type="submit" class="btn-primary">COMENZAR</button>
+    </form>
+  </div>
+
+  <!-- PANTALLA 2: CONTADOR -->
+  <div id="screen-counter">
+    <h2 id="coupleNames" class="names-display"></h2>
+    <p class="together-text">Nuestro tiempo juntos</p>
+    <p id="startLabel" class="date-display"></p>
+
+    <!-- Reloj Principal -->
+    <div class="main-timer num">
+      <div class="timer-years">
+        <span class="val" id="years">0</span>
+        <span class="unit">años</span>
+      </div>
+      <div class="timer-months-days">
+        <span class="val" id="months">0</span><span class="unit">meses</span>
+        <span class="sep">·</span>
+        <span class="val" id="days">0</span><span class="unit">días</span>
+      </div>
+      <div class="timer-live">
+        <span class="val" id="hours">00</span><span class="unit">h</span>
+        <span class="val" id="minutes">00</span><span class="unit">m</span>
+        <span class="val" id="seconds">00</span><span class="unit">s</span>
+      </div>
+    </div>
+
+    <!-- Totales -->
+    <div class="totals-grid num">
+      <div class="total-box">
+        <strong id="totalDays">0</strong>
+        <span>Días</span>
+      </div>
+      <div class="total-box">
+        <strong id="totalHours">0</strong>
+        <span>Horas</span>
+      </div>
+      <div class="total-box">
+        <strong id="totalMinutes">0</strong>
+        <span>Minutos</span>
+      </div>
+      <div class="total-box">
+        <strong id="totalSeconds">0</strong>
+        <span>Segundos</span>
+      </div>
+    </div>
+
+    <!-- Botón flotante de opciones -->
+    <button id="optionsBtn" class="btn-fab">⚙️</button>
+  </div>
+
+  <!-- MODAL DE OPCIONES -->
+  <div id="optionsModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-title">Opciones</div>
+      <button id="editBtn" class="btn-option">✏️ Editar datos</button>
+      <button id="saveBackupBtn" class="btn-option">💾 Guardar copia</button>
+      <button id="restoreBackupBtn" class="btn-option">📂 Restaurar copia</button>
+      <button id="closeModalBtn" class="btn-close">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Input oculto para cargar el archivo de backup -->
+  <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var KEY = 'contadorAmor_v2';
+  var MESES = ['enero','febrero','marzo','abril','mayo','junio',
+               'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var $ = function(id){ return document.getElementById(id); };
+  var data = null, timer = null;
+
+  function showError(msg){
+    var box = $('errorMsg');
+    box.textContent = msg;
+    box.style.display = 'block';
+  }
+  function hideError(){ $('errorMsg').style.display = 'none'; }
+
+  function loadData(){
+    try { var r = localStorage.getItem(KEY); if (r) return JSON.parse(r); } catch(e){}
+    return null;
+  }
+  function saveData(){
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+  }
+  function fmt(n){ return n.toLocaleString('es-ES'); }
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function addMonths(date, n){
+    var d = new Date(date.getTime());
+    var day = d.getDate();
+    d.setDate(1);
+    d.setMonth(d.getMonth() + n);
+    var dim = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(day, dim));
+    return d;
+  }
+  function addDays(date, n){
+    var d = new Date(date.getTime());
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+
+  function breakdown(start, end){
+    if (end <= start) return { y:0,m:0,d:0,h:0,mi:0,s:0 };
+    var cursor = new Date(start.getTime());
+    var y = 0, m = 0, d = 0, next;
+
+    next = addMonths(cursor, 12);
+    while (next <= end) { cursor = next; y++; next = addMonths(cursor, 12); }
+
+    next = addMonths(cursor, 1);
+    while (next <= end) { cursor = next; m++; next = addMonths(cursor, 1); }
+
+    next = addDays(cursor, 1);
+    while (next <= end) { cursor = next; d++; next = addDays(cursor, 1); }
+
+    var rem = end.getTime() - cursor.getTime();
+    return {
+      y: y, m: m, d: d,
+      h:  Math.floor(rem / 3600000),
+      mi: Math.floor((rem % 3600000) / 60000),
+      s:  Math.floor((rem % 60000) / 1000)
+    };
+  }
+
+  function formatStart(d, hasTime){
+    var s = d.getDate() + ' de ' + MESES[d.getMonth()] + ' de ' + d.getFullYear();
+    if (hasTime) s += ' · ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+    return 'Desde el ' + s;
+  }
+
+  function render(){
+    var start = new Date(data.start);
+    var now = new Date();
+
+    $('coupleNames').textContent = data.names;
+    $('startLabel').textContent = formatStart(start, data.hasTime);
+
+    var b = breakdown(start, now);
+    $('years').textContent   = fmt(b.y);
+    $('months').textContent  = fmt(b.m);
+    $('days').textContent    = fmt(b.d);
+    $('hours').textContent   = pad(b.h);
+    $('minutes').textContent = pad(b.mi);
+    $('seconds').textContent = pad(b.s);
+
+    var ms = Math.max(0, now.getTime() - start.getTime());
+    $('totalDays').textContent    = fmt(Math.floor(ms / 86400000));
+    $('totalHours').textContent   = fmt(Math.floor(ms / 3600000));
+    $('totalMinutes').textContent = fmt(Math.floor(ms / 60000));
+    $('totalSeconds').textContent = fmt(Math.floor(ms / 1000));
+  }
+
+  function startTimer(){
+    stopTimer();
+    render();
+    (function loop(){
+      timer = setTimeout(function(){ render(); loop(); }, 1000 - (Date.now() % 1000) + 5);
+    })();
+  }
+  function stopTimer(){ if (timer) { clearTimeout(timer); timer = null; } }
+
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden && data && timer) render();
+  });
+
+  function showCounter(){
+    $('screen-setup').classList.add('hidden');
+    $('screen-counter').classList.add('active');
+    startTimer();
+  }
+
+  function showSetup(){
+    stopTimer();
+    $('screen-counter').classList.remove('active');
+    $('screen-setup').classList.remove('hidden');
+  }
+
+  $('form').addEventListener('submit', function(e){
+    e.preventDefault();
+    hideError();
+
+    var names = $('namesInput').value.trim();
+    var dateStr = $('dateInput').value;
+    var timeStr = $('timeInput').value;
+
+    if (!names)    { showError('Por favor escribe los nombres.'); return; }
+    if (!dateStr)  { showError('Por favor selecciona la fecha.'); return; }
+
+    var parts = dateStr.split('-');
+    var yy = parseInt(parts[0], 10);
+    var mm = parseInt(parts[1], 10);
+    var dd = parseInt(parts[2], 10);
+
+    var hh = 0, min = 0;
+    if (timeStr) {
+      var tp = timeStr.split(':');
+      hh = parseInt(tp[0], 10) || 0;
+      min = parseInt(tp[1], 10) || 0;
+    }
+
+    var startDate = new Date(yy, mm - 1, dd, hh, min, 0, 0);
+
+    if (startDate.getTime() > Date.now() + 60000) {
+      showError('La fecha no puede ser en el futuro.');
+      return;
+    }
+
+    data = { names: names, start: startDate.toISOString(), hasTime: !!timeStr };
+    saveData();
+    showCounter();
+  });
+
+  // Modal
+  $('optionsBtn').addEventListener('click', function() {
+    $('optionsModal').classList.add('active');
+  });
+
+  $('closeModalBtn').addEventListener('click', function() {
+    $('optionsModal').classList.remove('active');
+  });
+
+  $('editBtn').addEventListener('click', function(){
+    if (!data) return;
+    $('optionsModal').classList.remove('active');
+    hideError();
+    $('namesInput').value = data.names;
+    var d = new Date(data.start);
+    $('dateInput').value = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+    $('timeInput').value = data.hasTime ? pad(d.getHours()) + ':' + pad(d.getMinutes()) : '';
+    showSetup();
+  });
+
+  $('saveBackupBtn').addEventListener('click', function() {
+    if (!data) return;
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+    var a = document.createElement('a');
+    a.setAttribute("href", dataStr);
+    a.setAttribute("download", "nuestro_amor_backup.json");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    $('optionsModal').classList.remove('active');
+  });
+
+  $('restoreBackupBtn').addEventListener('click', function() {
+    $('fileInput').click();
+  });
+
+  $('fileInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var importedData = JSON.parse(ev.target.result);
+        if (importedData.names && importedData.start) {
+          data = importedData;
+          saveData();
+          showCounter();
+          $('optionsModal').classList.remove('active');
+        } else {
+          alert("El archivo no tiene el formato correcto.");
+        }
+      } catch (err) {
+        alert("Error al leer el archivo.");
+      }
+    };
+    reader.readAsText(file);
+    this.value = '';
+  });
+
+  data = loadData();
+  if (data) showCounter();
+})();
+</script>
+</body>
+</html>
