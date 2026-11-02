@@ -7,11 +7,13 @@
 <title>Nuestro Amor</title>
 
 <!-- ========================================== -->
-<!-- CONFIGURACIÓN PWA                          -->
+<!-- CONFIGURACIÓN PWA PARA IPHONE Y ANDROID    -->
 <!-- ========================================== -->
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nuestro Amor">
+<!-- Icono específico para iPhone -->
 <link rel="apple-touch-icon" href="icon-192.png">
 
 <!-- ========================================== -->
@@ -32,7 +34,6 @@
   :root {
     --bg-dark: #2b0b3f;
     --bg-pink: linear-gradient(180deg, #ff4d8d 0%, #d9186b 100%);
-    --input-bg: rgba(0, 0, 0, 0.2);
     --text-light: #ffffff;
     --text-muted: #ffcce0;
   }
@@ -84,97 +85,15 @@
     font-feature-settings: "tnum" 1;
   }
 
-  /* Pantalla de Configuración */
-  h1 {
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-align: center;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-
-  h1 .cursive {
-    display: block;
-    font-family: 'Great Vibes', cursive;
-    font-size: 3.8rem;
-    font-weight: 400;
-    text-transform: none;
-    letter-spacing: 0;
-    line-height: 1.1;
-    margin-top: 5px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    -webkit-text-stroke: 1px white;
-  }
-
-  .error {
-    background: rgba(255, 60, 90, 0.9);
-    color: white;
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    margin-bottom: 15px;
-    text-align: center;
-    display: none;
-  }
-
-  .input-group { margin-bottom: 16px; }
-  .input-group label {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-    margin-left: 10px;
-    font-weight: 500;
-  }
-
-  input {
-    width: 100%;
-    padding: 14px 20px;
-    border-radius: 25px;
-    border: none;
-    background: var(--input-bg);
-    color: white;
-    font-size: 0.95rem;
-    font-family: 'Poppins', sans-serif;
-    outline: none;
-  }
-  input::placeholder { color: rgba(255,255,255,0.4); }
-  input:focus { box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
-  input[type="date"], input[type="time"] { color-scheme: dark; }
-
-  button {
-    border: none;
-    font-family: 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-  button:active { transform: scale(0.97); }
-
-  .btn-primary {
-    width: 100%;
-    padding: 16px;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 600;
-    background: #ffffff;
-    color: #d9186b;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    margin-top: auto;
-  }
-
   /* Pantalla de Contador */
   #screen-counter {
-    display: none;
+    display: flex;
     flex-direction: column;
     height: 100%;
     flex: 1;
     position: relative;
     min-width: 0;
   }
-  #screen-counter.active { display: flex; }
-  #screen-setup.hidden { display: none; }
 
   .names-display {
     font-family: 'Playfair Display', serif;
@@ -204,12 +123,13 @@
     width: 100%;
   }
 
+  /* Texto de la fecha (1 punto más grande) */
   .date-display {
     text-align: center;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.75);
+    font-size: 0.9rem; 
+    color: rgba(255,255,255,0.85);
     margin-bottom: 25px;
-    font-weight: 400;
+    font-weight: 500;
     width: 100%;
   }
 
@@ -306,7 +226,7 @@
     margin-top: 2px;
   }
 
-  /* Botón flotante MÁS PEQUEÑO (32px) */
+  /* Botón flotante de opciones */
   .btn-fab {
     position: absolute;
     bottom: 8px;
@@ -331,14 +251,16 @@
     opacity: 1;
   }
 
-  /* Menú de Opciones Modal */
+  /* ========================================== */
+  /* MENÚ INFERIOR COMPACTO                     */
+  /* ========================================== */
   .modal-overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.6);
     backdrop-filter: blur(4px);
     display: flex;
-    align-items: flex-end;
+    align-items: flex-end; /* Alineado abajo */
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s;
@@ -349,40 +271,50 @@
   .modal-content {
     background: #ffffff;
     width: 100%;
-    border-radius: 30px 30px 0 0;
-    padding: 24px;
+    border-radius: 20px 20px 0 0;
+    padding: 16px 24px 30px 24px; /* Relleno ajustado */
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px; /* Separación pequeña */
   }
   .modal-overlay.active .modal-content { transform: translateY(0); }
 
   .modal-title {
     color: #333;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
+  }
+
+  /* Quitar bordes por defecto del navegador */
+  .btn-option, .btn-close {
+    border: none !important;
+    outline: none !important;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
   }
 
   .btn-option {
     background: #f0f0f5;
     color: #333;
     font-weight: 500;
-    padding: 14px;
-    border-radius: 15px;
-    font-size: 1rem;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
     width: 100%;
   }
+  
   .btn-close {
     background: transparent;
     color: #888;
     font-weight: 600;
-    padding: 10px;
-    margin-top: 5px;
-    font-size: 1rem;
+    padding: 8px;
+    margin-top: 2px;
+    font-size: 0.9rem;
     width: 100%;
   }
 </style>
@@ -391,28 +323,7 @@
 
 <div class="app-container">
 
-  <!-- PANTALLA 1: CONFIGURACIÓN INICIAL -->
-  <div id="screen-setup">
-    <h1>Nuestra <span class="cursive">Fecha</span></h1>
-    <div id="errorMsg" class="error"></div>
-    <form id="form" novalidate>
-      <div class="input-group">
-        <label>Nombres de la pareja *</label>
-        <input id="namesInput" type="text" placeholder="Ej: Ana & Carlos" maxlength="60">
-      </div>
-      <div class="input-group">
-        <label>Fecha de inicio *</label>
-        <input id="dateInput" type="date">
-      </div>
-      <div class="input-group">
-        <label>Hora (opcional)</label>
-        <input id="timeInput" type="time">
-      </div>
-      <button type="submit" class="btn-primary">COMENZAR</button>
-    </form>
-  </div>
-
-  <!-- PANTALLA 2: CONTADOR (BLOQUEADO) -->
+  <!-- PANTALLA ÚNICA: CONTADOR -->
   <div id="screen-counter">
     <h2 id="coupleNames" class="names-display"></h2>
     <p class="together-text">Nuestro tiempo juntos</p>
@@ -454,14 +365,14 @@
       </div>
     </div>
 
-    <!-- Botón flotante de opciones (Más pequeño) -->
+    <!-- Botón flotante de opciones -->
     <button id="optionsBtn" class="btn-fab">⚙️</button>
   </div>
 
-  <!-- MODAL DE OPCIONES (Solo respaldos, sin edición) -->
+  <!-- MENÚ DESDE ABAJO -->
   <div id="optionsModal" class="modal-overlay">
     <div class="modal-content">
-      <div class="modal-title">Opciones de Respaldo</div>
+      <div class="modal-title">Opciones</div>
       <button id="saveBackupBtn" class="btn-option">💾 Guardar copia</button>
       <button id="restoreBackupBtn" class="btn-option">📂 Restaurar copia</button>
       <button id="closeModalBtn" class="btn-close">Cancelar</button>
@@ -470,20 +381,29 @@
 
   <!-- Input oculto para restaurar -->
   <input type="file" id="fileInput" accept=".json" style="display: none;">
+  
 </div>
 
 <script>
 (function(){
   'use strict';
-  var KEY = 'contadorAmor_v2';
+  
+  // =========================================================================
+  // 👇 ¡AQUÍ ESTÁN TUS DATOS! EDITA ESTAS DOS LÍNEAS CON TU INFORMACIÓN 👇
+  // =========================================================================
+  var data = {
+    names: "Gonzalo y Giny", 
+    start: "2024-05-03T00:00:00", 
+    hasTime: false 
+  };
+  // =========================================================================
+  // 👆 NO TOQUES NADA DE AQUÍ PARA ABAJO A MENOS QUE SEPAS QUÉ HACES 👆
+  // =========================================================================
+
   var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   var $ = function(id){ return document.getElementById(id); };
-  var data = null, timer = null;
+  var timer = null;
 
-  function showError(msg){ var box = $('errorMsg'); box.textContent = msg; box.style.display = 'block'; }
-  function hideError(){ $('errorMsg').style.display = 'none'; }
-  function loadData(){ try { var r = localStorage.getItem(KEY); if (r) return JSON.parse(r); } catch(e){} return null; }
-  function saveData(){ try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){} }
   function fmt(n){ return n.toLocaleString('es-ES'); }
   function pad(n){ return n < 10 ? '0' + n : '' + n; }
 
@@ -522,45 +442,22 @@
 
   function startTimer(){ stopTimer(); render(); (function loop(){ timer = setTimeout(function(){ render(); loop(); }, 1000 - (Date.now() % 1000) + 5); })(); }
   function stopTimer(){ if (timer) { clearTimeout(timer); timer = null; } }
-  document.addEventListener('visibilitychange', function(){ if (!document.hidden && data && timer) render(); });
-
-  function showCounter(){ 
-    $('screen-setup').classList.add('hidden'); 
-    $('screen-counter').classList.add('active'); 
-    startTimer(); 
-  }
-
-  // Al enviar el formulario por primera vez (Bloqueo)
-  $('form').addEventListener('submit', function(e){
-    e.preventDefault(); hideError();
-    var names = $('namesInput').value.trim(); var dateStr = $('dateInput').value; var timeStr = $('timeInput').value;
-    if (!names) { showError('Por favor escribe los nombres.'); return; }
-    if (!dateStr) { showError('Por favor selecciona la fecha.'); return; }
-    var parts = dateStr.split('-'); var yy = parseInt(parts[0], 10); var mm = parseInt(parts[1], 10); var dd = parseInt(parts[2], 10);
-    var hh = 0, min = 0;
-    if (timeStr) { var tp = timeStr.split(':'); hh = parseInt(tp[0], 10) || 0; min = parseInt(tp[1], 10) || 0; }
-    var startDate = new Date(yy, mm - 1, dd, hh, min, 0, 0);
-    if (startDate.getTime() > Date.now() + 60000) { showError('La fecha no puede ser en el futuro.'); return; }
-    
-    data = { names: names, start: startDate.toISOString(), hasTime: !!timeStr };
-    saveData(); 
-    showCounter();
-  });
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && timer) render(); });
 
   // Control del Modal
   $('optionsBtn').addEventListener('click', function() { $('optionsModal').classList.add('active'); });
   $('closeModalBtn').addEventListener('click', function() { $('optionsModal').classList.remove('active'); });
 
-  // Guardar copia de seguridad
+  // Guardar copia
   $('saveBackupBtn').addEventListener('click', function() {
-    if (!data) return;
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
     var a = document.createElement('a'); a.setAttribute("href", dataStr); a.setAttribute("download", "nuestro_amor_backup.json");
     document.body.appendChild(a); a.click(); a.remove(); $('optionsModal').classList.remove('active');
   });
 
-  // Restaurar copia de seguridad
+  // Restaurar copia
   $('restoreBackupBtn').addEventListener('click', function() { $('fileInput').click(); });
+
   $('fileInput').addEventListener('change', function(e) {
     var file = e.target.files[0]; if (!file) return;
     var reader = new FileReader();
@@ -568,32 +465,28 @@
       try {
         var importedData = JSON.parse(ev.target.result);
         if (importedData.names && importedData.start) {
-          data = importedData; saveData(); showCounter(); $('optionsModal').classList.remove('active');
+          data = importedData; 
+          render(); 
+          $('optionsModal').classList.remove('active');
+          alert("Copia restaurada con éxito.");
         } else { alert("El archivo no tiene el formato correcto."); }
       } catch (err) { alert("Error al leer el archivo."); }
     };
     reader.readAsText(file); this.value = '';
   });
 
-  // Inicializar App (Salta directo al contador si ya hay datos guardados)
-  data = loadData(); 
-  if (data) {
-    showCounter();
-  }
+  // Iniciar aplicación
+  startTimer();
 })();
 
 // ==========================================
-// REGISTRO DE LA PWA (Service Worker)
+// REGISTRO DE LA PWA
 // ==========================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
-      .then(registration => {
-        console.log('Service Worker registrado con éxito:', registration.scope);
-      })
-      .catch(error => {
-        console.log('Error al registrar el Service Worker:', error);
-      });
+      .then(registration => { console.log('SW registrado'); })
+      .catch(error => { console.log('Error SW:', error); });
   });
 }
 </script>
