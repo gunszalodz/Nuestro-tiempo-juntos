@@ -5,6 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2b0b3f">
 <title>Nuestro Amor</title>
+
+<!-- ========================================== -->
+<!-- CONFIGURACIÓN PWA                          -->
+<!-- ========================================== -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- ========================================== -->
+<!-- GOOGLE ANALYTICS (ID: G-F045GK9WTZ)        -->
+<!-- ========================================== -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F045GK9WTZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F045GK9WTZ');
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -156,7 +176,6 @@
   #screen-counter.active { display: flex; }
   #screen-setup.hidden { display: none; }
 
-  /* Tipografía formal y legible para los nombres */
   .names-display {
     font-family: 'Playfair Display', serif;
     font-size: 2.4rem;
@@ -172,7 +191,6 @@
     text-overflow: ellipsis;
   }
 
-  /* Subtítulo elegante */
   .together-text {
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
@@ -288,24 +306,24 @@
     margin-top: 2px;
   }
 
-  /* Botón flotante más pequeño (40px) */
+  /* Botón flotante MÁS PEQUEÑO (32px) */
   .btn-fab {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 40px;
-    height: 40px;
+    bottom: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.2);
     color: white;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.15);
     backdrop-filter: blur(5px);
     z-index: 10;
-    opacity: 0.8;
+    opacity: 0.7;
     transition: opacity 0.2s, background 0.2s;
   }
   .btn-fab:hover, .btn-fab:active { 
@@ -358,7 +376,6 @@
     font-size: 1rem;
     width: 100%;
   }
-  .btn-option.danger { color: #d9186b; }
   .btn-close {
     background: transparent;
     color: #888;
@@ -374,39 +391,33 @@
 
 <div class="app-container">
 
-  <!-- PANTALLA 1: CONFIGURACIÓN -->
+  <!-- PANTALLA 1: CONFIGURACIÓN INICIAL -->
   <div id="screen-setup">
     <h1>Nuestra <span class="cursive">Fecha</span></h1>
-
     <div id="errorMsg" class="error"></div>
-
     <form id="form" novalidate>
       <div class="input-group">
         <label>Nombres de la pareja *</label>
         <input id="namesInput" type="text" placeholder="Ej: Ana & Carlos" maxlength="60">
       </div>
-
       <div class="input-group">
         <label>Fecha de inicio *</label>
         <input id="dateInput" type="date">
       </div>
-
       <div class="input-group">
         <label>Hora (opcional)</label>
         <input id="timeInput" type="time">
       </div>
-
       <button type="submit" class="btn-primary">COMENZAR</button>
     </form>
   </div>
 
-  <!-- PANTALLA 2: CONTADOR -->
+  <!-- PANTALLA 2: CONTADOR (BLOQUEADO) -->
   <div id="screen-counter">
     <h2 id="coupleNames" class="names-display"></h2>
     <p class="together-text">Nuestro tiempo juntos</p>
     <p id="startLabel" class="date-display"></p>
 
-    <!-- Reloj Principal -->
     <div class="main-timer num">
       <div class="timer-years">
         <span class="val" id="years">0</span>
@@ -424,7 +435,6 @@
       </div>
     </div>
 
-    <!-- Totales -->
     <div class="totals-grid num">
       <div class="total-box">
         <strong id="totalDays">0</strong>
@@ -444,88 +454,53 @@
       </div>
     </div>
 
-    <!-- Botón flotante de opciones -->
+    <!-- Botón flotante de opciones (Más pequeño) -->
     <button id="optionsBtn" class="btn-fab">⚙️</button>
   </div>
 
-  <!-- MODAL DE OPCIONES -->
+  <!-- MODAL DE OPCIONES (Solo respaldos, sin edición) -->
   <div id="optionsModal" class="modal-overlay">
     <div class="modal-content">
-      <div class="modal-title">Opciones</div>
-      <button id="editBtn" class="btn-option">✏️ Editar datos</button>
+      <div class="modal-title">Opciones de Respaldo</div>
       <button id="saveBackupBtn" class="btn-option">💾 Guardar copia</button>
       <button id="restoreBackupBtn" class="btn-option">📂 Restaurar copia</button>
       <button id="closeModalBtn" class="btn-close">Cancelar</button>
     </div>
   </div>
 
-  <!-- Input oculto para cargar el archivo de backup -->
+  <!-- Input oculto para restaurar -->
   <input type="file" id="fileInput" accept=".json" style="display: none;">
-
 </div>
 
 <script>
 (function(){
   'use strict';
   var KEY = 'contadorAmor_v2';
-  var MESES = ['enero','febrero','marzo','abril','mayo','junio',
-               'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   var $ = function(id){ return document.getElementById(id); };
   var data = null, timer = null;
 
-  function showError(msg){
-    var box = $('errorMsg');
-    box.textContent = msg;
-    box.style.display = 'block';
-  }
+  function showError(msg){ var box = $('errorMsg'); box.textContent = msg; box.style.display = 'block'; }
   function hideError(){ $('errorMsg').style.display = 'none'; }
-
-  function loadData(){
-    try { var r = localStorage.getItem(KEY); if (r) return JSON.parse(r); } catch(e){}
-    return null;
-  }
-  function saveData(){
-    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
-  }
+  function loadData(){ try { var r = localStorage.getItem(KEY); if (r) return JSON.parse(r); } catch(e){} return null; }
+  function saveData(){ try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){} }
   function fmt(n){ return n.toLocaleString('es-ES'); }
   function pad(n){ return n < 10 ? '0' + n : '' + n; }
 
   function addMonths(date, n){
-    var d = new Date(date.getTime());
-    var day = d.getDate();
-    d.setDate(1);
-    d.setMonth(d.getMonth() + n);
-    var dim = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
-    d.setDate(Math.min(day, dim));
-    return d;
+    var d = new Date(date.getTime()); var day = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + n);
+    var dim = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); d.setDate(Math.min(day, dim)); return d;
   }
-  function addDays(date, n){
-    var d = new Date(date.getTime());
-    d.setDate(d.getDate() + n);
-    return d;
-  }
+  function addDays(date, n){ var d = new Date(date.getTime()); d.setDate(d.getDate() + n); return d; }
 
   function breakdown(start, end){
     if (end <= start) return { y:0,m:0,d:0,h:0,mi:0,s:0 };
-    var cursor = new Date(start.getTime());
-    var y = 0, m = 0, d = 0, next;
-
-    next = addMonths(cursor, 12);
-    while (next <= end) { cursor = next; y++; next = addMonths(cursor, 12); }
-
-    next = addMonths(cursor, 1);
-    while (next <= end) { cursor = next; m++; next = addMonths(cursor, 1); }
-
-    next = addDays(cursor, 1);
-    while (next <= end) { cursor = next; d++; next = addDays(cursor, 1); }
-
+    var cursor = new Date(start.getTime()); var y = 0, m = 0, d = 0, next;
+    next = addMonths(cursor, 12); while (next <= end) { cursor = next; y++; next = addMonths(cursor, 12); }
+    next = addMonths(cursor, 1); while (next <= end) { cursor = next; m++; next = addMonths(cursor, 1); }
+    next = addDays(cursor, 1); while (next <= end) { cursor = next; d++; next = addDays(cursor, 1); }
     var rem = end.getTime() - cursor.getTime();
-    return {
-      y: y, m: m, d: d,
-      h:  Math.floor(rem / 3600000),
-      mi: Math.floor((rem % 3600000) / 60000),
-      s:  Math.floor((rem % 60000) / 1000)
-    };
+    return { y: y, m: m, d: d, h: Math.floor(rem / 3600000), mi: Math.floor((rem % 3600000) / 60000), s: Math.floor((rem % 60000) / 1000) };
   }
 
   function formatStart(d, hasTime){
@@ -535,150 +510,92 @@
   }
 
   function render(){
-    var start = new Date(data.start);
-    var now = new Date();
-
-    $('coupleNames').textContent = data.names;
-    $('startLabel').textContent = formatStart(start, data.hasTime);
-
+    var start = new Date(data.start); var now = new Date();
+    $('coupleNames').textContent = data.names; $('startLabel').textContent = formatStart(start, data.hasTime);
     var b = breakdown(start, now);
-    $('years').textContent   = fmt(b.y);
-    $('months').textContent  = fmt(b.m);
-    $('days').textContent    = fmt(b.d);
-    $('hours').textContent   = pad(b.h);
-    $('minutes').textContent = pad(b.mi);
-    $('seconds').textContent = pad(b.s);
-
+    $('years').textContent = fmt(b.y); $('months').textContent = fmt(b.m); $('days').textContent = fmt(b.d);
+    $('hours').textContent = pad(b.h); $('minutes').textContent = pad(b.mi); $('seconds').textContent = pad(b.s);
     var ms = Math.max(0, now.getTime() - start.getTime());
-    $('totalDays').textContent    = fmt(Math.floor(ms / 86400000));
-    $('totalHours').textContent   = fmt(Math.floor(ms / 3600000));
-    $('totalMinutes').textContent = fmt(Math.floor(ms / 60000));
-    $('totalSeconds').textContent = fmt(Math.floor(ms / 1000));
+    $('totalDays').textContent = fmt(Math.floor(ms / 86400000)); $('totalHours').textContent = fmt(Math.floor(ms / 3600000));
+    $('totalMinutes').textContent = fmt(Math.floor(ms / 60000)); $('totalSeconds').textContent = fmt(Math.floor(ms / 1000));
   }
 
-  function startTimer(){
-    stopTimer();
-    render();
-    (function loop(){
-      timer = setTimeout(function(){ render(); loop(); }, 1000 - (Date.now() % 1000) + 5);
-    })();
-  }
+  function startTimer(){ stopTimer(); render(); (function loop(){ timer = setTimeout(function(){ render(); loop(); }, 1000 - (Date.now() % 1000) + 5); })(); }
   function stopTimer(){ if (timer) { clearTimeout(timer); timer = null; } }
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && data && timer) render(); });
 
-  document.addEventListener('visibilitychange', function(){
-    if (!document.hidden && data && timer) render();
-  });
-
-  function showCounter(){
-    $('screen-setup').classList.add('hidden');
-    $('screen-counter').classList.add('active');
-    startTimer();
+  function showCounter(){ 
+    $('screen-setup').classList.add('hidden'); 
+    $('screen-counter').classList.add('active'); 
+    startTimer(); 
   }
 
-  function showSetup(){
-    stopTimer();
-    $('screen-counter').classList.remove('active');
-    $('screen-setup').classList.remove('hidden');
-  }
-
+  // Al enviar el formulario por primera vez (Bloqueo)
   $('form').addEventListener('submit', function(e){
-    e.preventDefault();
-    hideError();
-
-    var names = $('namesInput').value.trim();
-    var dateStr = $('dateInput').value;
-    var timeStr = $('timeInput').value;
-
-    if (!names)    { showError('Por favor escribe los nombres.'); return; }
-    if (!dateStr)  { showError('Por favor selecciona la fecha.'); return; }
-
-    var parts = dateStr.split('-');
-    var yy = parseInt(parts[0], 10);
-    var mm = parseInt(parts[1], 10);
-    var dd = parseInt(parts[2], 10);
-
+    e.preventDefault(); hideError();
+    var names = $('namesInput').value.trim(); var dateStr = $('dateInput').value; var timeStr = $('timeInput').value;
+    if (!names) { showError('Por favor escribe los nombres.'); return; }
+    if (!dateStr) { showError('Por favor selecciona la fecha.'); return; }
+    var parts = dateStr.split('-'); var yy = parseInt(parts[0], 10); var mm = parseInt(parts[1], 10); var dd = parseInt(parts[2], 10);
     var hh = 0, min = 0;
-    if (timeStr) {
-      var tp = timeStr.split(':');
-      hh = parseInt(tp[0], 10) || 0;
-      min = parseInt(tp[1], 10) || 0;
-    }
-
+    if (timeStr) { var tp = timeStr.split(':'); hh = parseInt(tp[0], 10) || 0; min = parseInt(tp[1], 10) || 0; }
     var startDate = new Date(yy, mm - 1, dd, hh, min, 0, 0);
-
-    if (startDate.getTime() > Date.now() + 60000) {
-      showError('La fecha no puede ser en el futuro.');
-      return;
-    }
-
+    if (startDate.getTime() > Date.now() + 60000) { showError('La fecha no puede ser en el futuro.'); return; }
+    
     data = { names: names, start: startDate.toISOString(), hasTime: !!timeStr };
-    saveData();
+    saveData(); 
     showCounter();
   });
 
-  // Modal
-  $('optionsBtn').addEventListener('click', function() {
-    $('optionsModal').classList.add('active');
-  });
+  // Control del Modal
+  $('optionsBtn').addEventListener('click', function() { $('optionsModal').classList.add('active'); });
+  $('closeModalBtn').addEventListener('click', function() { $('optionsModal').classList.remove('active'); });
 
-  $('closeModalBtn').addEventListener('click', function() {
-    $('optionsModal').classList.remove('active');
-  });
-
-  $('editBtn').addEventListener('click', function(){
-    if (!data) return;
-    $('optionsModal').classList.remove('active');
-    hideError();
-    $('namesInput').value = data.names;
-    var d = new Date(data.start);
-    $('dateInput').value = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
-    $('timeInput').value = data.hasTime ? pad(d.getHours()) + ':' + pad(d.getMinutes()) : '';
-    showSetup();
-  });
-
+  // Guardar copia de seguridad
   $('saveBackupBtn').addEventListener('click', function() {
     if (!data) return;
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-    var a = document.createElement('a');
-    a.setAttribute("href", dataStr);
-    a.setAttribute("download", "nuestro_amor_backup.json");
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    $('optionsModal').classList.remove('active');
+    var a = document.createElement('a'); a.setAttribute("href", dataStr); a.setAttribute("download", "nuestro_amor_backup.json");
+    document.body.appendChild(a); a.click(); a.remove(); $('optionsModal').classList.remove('active');
   });
 
-  $('restoreBackupBtn').addEventListener('click', function() {
-    $('fileInput').click();
-  });
-
+  // Restaurar copia de seguridad
+  $('restoreBackupBtn').addEventListener('click', function() { $('fileInput').click(); });
   $('fileInput').addEventListener('change', function(e) {
-    var file = e.target.files[0];
-    if (!file) return;
-
+    var file = e.target.files[0]; if (!file) return;
     var reader = new FileReader();
     reader.onload = function(ev) {
       try {
         var importedData = JSON.parse(ev.target.result);
         if (importedData.names && importedData.start) {
-          data = importedData;
-          saveData();
-          showCounter();
-          $('optionsModal').classList.remove('active');
-        } else {
-          alert("El archivo no tiene el formato correcto.");
-        }
-      } catch (err) {
-        alert("Error al leer el archivo.");
-      }
+          data = importedData; saveData(); showCounter(); $('optionsModal').classList.remove('active');
+        } else { alert("El archivo no tiene el formato correcto."); }
+      } catch (err) { alert("Error al leer el archivo."); }
     };
-    reader.readAsText(file);
-    this.value = '';
+    reader.readAsText(file); this.value = '';
   });
 
-  data = loadData();
-  if (data) showCounter();
+  // Inicializar App (Salta directo al contador si ya hay datos guardados)
+  data = loadData(); 
+  if (data) {
+    showCounter();
+  }
 })();
+
+// ==========================================
+// REGISTRO DE LA PWA (Service Worker)
+// ==========================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(registration => {
+        console.log('Service Worker registrado con éxito:', registration.scope);
+      })
+      .catch(error => {
+        console.log('Error al registrar el Service Worker:', error);
+      });
+  });
+}
 </script>
 </body>
 </html>
